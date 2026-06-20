@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>沖繩 7 日行程</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap');
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+:root{
+  --ink: #1b3a4b;
+  --ink-soft: #6b7785;
+  --time-red: #e2583f;
+  --bg: #f7f8fa;
+  --card-line: #e7eaee;
+  --lodge-bg: #eaf4f6;
+  --lodge-label: #1f9c8c;
+}
+
+body{
+  font-family: 'Noto Sans TC', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  padding-bottom: 60px;
+}
+
+/* ---- Top header ---- */
+.hero{
+  background: linear-gradient(120deg, #1b3a4b, #2d6e8c);
+  color: white;
+  padding: 36px 20px 28px;
+  text-align: center;
+}
+.hero .eyebrow{
+  font-size: 11px;
+  letter-spacing: 4px;
+  opacity: 0.75;
+  font-weight: 600;
+}
+.hero h1{
+  font-size: 26px;
+  font-weight: 900;
+  margin-top: 8px;
+  letter-spacing: 1px;
+}
+.hero .dates{
+  margin-top: 6px;
+  font-size: 13px;
+  opacity: 0.85;
+  font-weight: 500;
+}
+
+/* ---- Sticky day nav ---- */
+.daynav{
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
+  border-bottom: 1px solid var(--card-line);
+  display: flex;
+  overflow-x: auto;
+  padding: 10px 12px;
+  gap: 8px;
+  -webkit-overflow-scrolling: touch;
+}
+.daynav::-webkit-scrollbar{ display:none; }
+.daynav a{
+  flex: 0 0 auto;
+  text-decoration: none;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  background: var(--bg);
+  border: 1px solid var(--card-line);
+  border-radius: 999px;
+  padding: 7px 14px;
+  white-space: nowrap;
+  transition: all .15s ease;
+}
+.daynav a:active{ transform: scale(0.96); }
+
+/* ---- Container ---- */
+.wrap{
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 18px 14px 0;
+}
+
+/* ---- Day card ---- */
+.day{
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 18px;
+  box-shadow: 0 1px 3px rgba(27,58,75,0.06);
+  overflow: hidden;
+  scroll-margin-top: 64px;
+  border-left: 6px solid var(--accent);
+}
+
+.day-head{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--card-line);
+}
+.day-head .left{
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.day-head h2{
+  font-size: 19px;
+  font-weight: 900;
+  color: var(--ink);
+}
+.day-head .date{
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+.day-head .route{
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, white);
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.timeline{
+  padding: 14px 18px 16px;
+}
+
+.stop{
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  position: relative;
+}
+.stop .t{
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--time-red);
+  padding-top: 1px;
+}
+.stop .body{
+  position: relative;
+  padding-left: 14px;
+  padding-bottom: 16px;
+  border-left: 2px dashed #d8dee3;
+  margin-left: 2px;
+}
+.stop:last-of-type .body{ border-left: 2px dashed transparent; padding-bottom: 0; }
+.stop .body::before{
+  content:'';
+  position:absolute;
+  left:-5px; top:2px;
+  width:8px; height:8px;
+  border-radius:50%;
+  background: var(--accent);
+}
+.stop .place{
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.place-link{
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  color: var(--ink);
+}
+.place-link:active{ opacity: 0.6; }
+.map-ic{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 16%, white);
+  flex-shrink: 0;
+}
+.map-ic svg{ width: 11px; height: 11px; }
+.stop .desc{
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  margin-top: 3px;
+  line-height: 1.55;
+}
+.stop .desc ul{ margin: 4px 0 0 16px; padding:0; }
+.stop .desc li{ margin-bottom: 1px; }
+.stop .tag{
+  display:inline-block;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-right: 6px;
+}
+
+.drive{
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  margin-top: -4px;
+}
+.drive .gap{}
+.drive .line{
+  padding-left: 14px;
+  border-left: 2px dashed #d8dee3;
+  padding-bottom: 14px;
+  margin-left: 2px;
+  display:flex;
+  align-items:center;
+}
+.drive .pill{
+  font-size: 11.5px;
+  color: var(--time-red);
+  font-weight: 600;
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
+.lodge{
+  display: grid;
+  grid-template-columns: 52px 1fr;
+}
+.lodge .gap{}
+.lodge .card{
+  margin-left: 16px;
+  background: var(--lodge-bg);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display:flex;
+  align-items:center;
+  gap: 10px;
+}
+.lodge .card .ic{ font-size: 18px; }
+.lodge .card .label{
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--lodge-label);
+  letter-spacing: 0.5px;
+}
+.lodge .card .name{
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 1px;
+}
+.lodge .card .sub{
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.flight{
+  display:grid;
+  grid-template-columns: 52px 1fr;
+}
+.flight .gap{}
+.flight .card{
+  margin-left: 16px;
+  background: var(--ink);
+  color: white;
+  border-radius: 8px;
+  padding: 12px 14px;
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+}
+.flight .card .label{ font-size:10px; opacity:.7; letter-spacing:2px; font-weight:700;}
+.flight .card .name{ font-size:13.5px; font-weight:700; margin-top:2px;}
+
+footer{
+  text-align:center;
+  font-size: 11px;
+  color: var(--ink-soft);
+  padding: 24px 0 8px;
+  letter-spacing: 1px;
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">OKINAWA TRIP</div>
+  <h1>沖繩 7 日行程</h1>
+  <div class="dates">2026.6.28（日）— 7.4（六）</div>
+</div>
+
+<nav class="daynav" id="daynav">
+  <a href="#day1">Day 1</a>
+  <a href="#day2">Day 2</a>
+  <a href="#day3">Day 3</a>
+  <a href="#day4">Day 4</a>
+  <a href="#day5">Day 5</a>
+  <a href="#day6">Day 6</a>
+  <a href="#day7">Day 7</a>
+</nav>
+
+<div class="wrap">
+
+  <!-- DAY 1 -->
+  <section class="day" id="day1" style="--accent:#e2763f;">
+    <div class="day-head">
+      <div class="left">
+        <h2>Day 1</h2>
+        <span class="date">6/28（日）</span>
+      </div>
+      <span class="route">南部</span>
+    </div>
+    <div class="timeline">
+      <div class="stop">
+        <div class="t">20:50</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E9%82%A3%E8%A6%87%E7%A9%BA%E6%B8%AF" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>抵達沖繩那霸機場</span></a></div>
+          <div class="desc">辦理入境、領取行李，準備展開沖繩 7 日旅程</div>
+        </div>
+      </div>
+      <div class="drive">
+        <div class="gap"></div>
+        <div class="line"><span class="pill">🚗 預約車 5min / 電車 20min</span></div>
+      </div>
+      <div class="lodge">
+        <div class="gap"></div>
+        <div class="card">
+          <div class="ic">🏠</div>
+          <div>
+            <div class="label">今晚住宿</div>
+            <a class="name" style="text-decoration:none;color:inherit;display:inline-block;border-bottom:1px dashed #9fb3bb;" href="https://www.google.com/maps/search/?api=1&query=B/C%20HOTEL%20%E9%82%A3%E8%A6%87" target="_blank" rel="noopener">B/C HOTEL 那霸（雙人房） ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAY 2 -->
+  <section class="day" id="day2" style="--accent:#3d7ea6;">
+    <div class="day-head">
+      <div class="left">
+        <h2>Day 2</h2>
+        <span class="date">6/29（一）</span>
+      </div>
+      <span class="route">南 → 中</span>
+    </div>
+    <div class="timeline">
+      <div class="stop">
+        <div class="t">09:00</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=OTS%E9%82%A3%E8%A6%87%E7%A9%BA%E6%B8%AF%E5%BA%97" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>OTS 那霸租車</span></a></div>
+          <div class="desc">領車，回住宿拿行李退房</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 60min</span></div></div>
+
+      <div class="stop">
+        <div class="t">11:00</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Cafe%20Bagel%20%E6%B2%96%E7%B9%A9" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>Cafe Bagel</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 1h</span></a></div>
+          <div class="desc">享用沖繩早午餐</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 15min</span></div></div>
+
+      <div class="stop">
+        <div class="t">12:30</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E9%9D%92%E3%81%AE%E6%B4%9E%E7%AA%9F%20%E6%B2%96%E7%B8%84" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>青之洞窟</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 2h</span></a></div>
+          <div class="desc"><span class="tag">🤿 潛水</span>體驗潛水行程，探索夢幻藍洞</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 35min</span></div></div>
+
+      <div class="stop">
+        <div class="t">15:15</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E6%AE%8B%E6%B3%A2%E5%B2%AC" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>殘波岬</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 1h</span></a></div>
+          <div class="desc">欣賞壯麗斷崖與白色燈塔風光</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 20min</span></div></div>
+
+      <div class="stop">
+        <div class="t">16:50</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E7%BE%8E%E5%9B%BD%E6%9D%91%20%E6%B2%96%E7%B8%84" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>美國村</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 4h</span></a></div>
+          <div class="desc"><span class="tag">🛍️ 逛街</span>異國風情街區漫步、逛街、享用晚餐、夕陽海景</div>
+        </div>
+      </div>
+      <div class="lodge">
+        <div class="gap"></div>
+        <div class="card">
+          <div class="ic">🏠</div>
+          <div>
+            <div class="label">今晚住宿</div>
+            <a class="name" style="text-decoration:none;color:inherit;display:inline-block;border-bottom:1px dashed #9fb3bb;" href="https://www.google.com/maps/search/?api=1&query=%E6%B2%96%E7%B8%84%E3%82%A2%E3%83%AA%E3%83%BC%E3%83%8A%20%E5%8C%97%E8%B0%B7" target="_blank" rel="noopener">沖繩 Arena 附近民宿 ↗</a>
+            <div class="sub">車程 20min・到沖繩アリーナ車程10分・到イオンライカム車程5分・洗濯機/乾燥機/停車場</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAY 3 -->
+  <section class="day" id="day3" style="--accent:#2a9d8f;">
+    <div class="day-head">
+      <div class="left">
+        <h2>Day 3</h2>
+        <span class="date">6/30（二）</span>
+      </div>
+      <span class="route">中 → 北</span>
+    </div>
+    <div class="timeline">
+      <div class="stop">
+        <div class="t">10:40</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E4%B8%87%E5%BA%A7%E6%AF%9B" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>萬座毛</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 1h</span></a></div>
+          <div class="desc">沖繩代表性海蝕地形景觀</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 20min</span></div></div>
+
+      <div class="stop">
+        <div class="t">11:55</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Ryukyu%20Beach%20Club%20%E6%81%A9%E7%B4%8D%E6%9D%91" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>Ryukyu Beach Club</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 2h</span></a></div>
+          <div class="desc"><span class="tag">☕ 咖啡</span>恩納村海景咖啡廳</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 40min</span></div></div>
+
+      <div class="stop">
+        <div class="t">13:45</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E9%83%A8%E7%80%AC%E5%90%8D%E6%B5%B7%E4%B8%AD%E5%85%AC%E5%9C%92" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>部瀨名海中公園</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 1h</span></a></div>
+          <div class="desc"><span class="tag">🌊 海景</span>海中展望塔欣賞海底世界</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 20min</span></div></div>
+
+      <div class="stop">
+        <div class="t">15:25</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E7%80%AC%E5%BA%95%E3%83%93%E3%83%BC%E3%83%81" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>瀨底島 Sesoko Beach</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 2h</span></a></div>
+          <div class="desc"><span class="tag">🏖️ 海灘</span>マリンスタジオ透明獨木舟，透明海水體驗</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 30min</span></div></div>
+
+      <div class="stop">
+        <div class="t">18:00</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E7%84%BC%E8%82%89%E3%81%AE%E7%89%A7%E5%A0%B4%20%E6%9C%AC%E9%83%A8%E7%89%A7%E5%A0%B4" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>燒肉本部牧場</span></a></div>
+          <div class="desc"><span class="tag">🥩 晚餐</span>沖繩人氣燒肉晚餐</div>
+        </div>
+      </div>
+      <div class="lodge">
+        <div class="gap"></div>
+        <div class="card">
+          <div class="ic">🏠</div>
+          <div>
+            <div class="label">今晚住宿</div>
+            <a class="name" style="text-decoration:none;color:inherit;display:inline-block;border-bottom:1px dashed #9fb3bb;" href="https://www.google.com/maps/search/?api=1&query=simAsim%20Cottage%20Kouri%20%E5%8F%A4%E5%AE%87%E5%88%A9%E5%B3%B6" target="_blank" rel="noopener">古宇利 simAsim Cottage Kouri ↗</a>
+            <div class="sub">車程 30min</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAY 4 -->
+  <section class="day" id="day4" style="--accent:#e07856;">
+    <div class="day-head">
+      <div class="left">
+        <h2>Day 4</h2>
+        <span class="date">7/1（三）</span>
+      </div>
+      <span class="route">北 → 中</span>
+    </div>
+    <div class="timeline">
+      <div class="stop">
+        <div class="t">10:40</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E6%B2%96%E7%B8%84%E7%BE%8E%E3%82%89%E6%B5%B7%E6%B0%B4%E6%97%8F%E9%A4%A8" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>美麗海水族館</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 2h</span></a></div>
+          <div class="desc"><span class="tag">🐋 必訪</span>沖繩必訪景點，欣賞巨大黑潮水槽</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 35min</span></div></div>
+
+      <div class="stop">
+        <div class="t">13:20</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Ocean%20Blue%20%E6%B2%96%E7%B8%84%E7%BE%8E%E3%82%89%E6%B5%B7%E6%B0%B4%E6%97%8F%E9%A4%A8" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>美麗海 Ocean Blue Cafe</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 1h</span></a></div>
+          <div class="desc"><span class="tag">☕ 咖啡</span>水族館旁海景咖啡廳</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 20min</span></div></div>
+
+      <div class="stop">
+        <div class="t">14:55</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E5%82%99%E7%80%AC%E5%B4%8E%E3%83%93%E3%83%BC%E3%83%81" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>備瀨崎海灘</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 1h</span></a></div>
+          <div class="desc"><span class="tag">🐠 熱帶魚</span>步遊欣賞熱帶魚與福木林道</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 25min</span></div></div>
+
+      <div class="stop">
+        <div class="t">16:30</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E5%8F%A4%E5%AE%87%E5%88%A9%E5%A4%A7%E6%A9%8B" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>古宇利島／古宇利大橋</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 3h ★</span></a></div>
+          <div class="desc"><span class="tag">🌉 跨海大橋</span><span class="tag">🍦 黑糖牛奶</span>欣賞沖繩最美跨海景色</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 60min</span></div></div>
+
+      <div class="stop">
+        <div class="t">19:00</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E7%90%89%E7%90%83%E3%81%99%E3%81%8D%E7%84%BC%E3%81%8D%20%E5%92%8C%E7%89%9B%20%E6%B2%96%E7%B8%84" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>和牛壽喜燒</span></a></div>
+          <div class="desc"><span class="tag">🍲 預約晚餐</span></div>
+        </div>
+      </div>
+      <div class="lodge">
+        <div class="gap"></div>
+        <div class="card">
+          <div class="ic">🏠</div>
+          <div>
+            <div class="label">今晚住宿</div>
+            <a class="name" style="text-decoration:none;color:inherit;display:inline-block;border-bottom:1px dashed #9fb3bb;" href="https://www.google.com/maps/search/?api=1&query=My%20Beach%20Resort%20%E6%B2%96%E7%B8%84" target="_blank" rel="noopener">My Beach Resort ↗</a>
+            <div class="sub">車程 1h</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAY 5 -->
+  <section class="day" id="day5" style="--accent:#6c5b7b;">
+    <div class="day-head">
+      <div class="left">
+        <h2>Day 5</h2>
+        <span class="date">7/2（四）</span>
+      </div>
+      <span class="route">中 → 南</span>
+    </div>
+    <div class="timeline">
+      <div class="stop">
+        <div class="t">10:35</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E3%82%A4%E3%82%AA%E3%83%B3%E3%83%A2%E3%83%BC%E3%83%AB%E6%B2%96%E7%B8%84%E3%83%A9%E3%82%A4%E3%82%AB%E3%83%A0%20PARCO%20CITY" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>PARCO CITY</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 3h</span></a></div>
+          <div class="desc"><span class="tag">🛍️ 購物</span>沖繩大型購物中心</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 30min</span></div></div>
+
+      <div class="stop">
+        <div class="t">13:15</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E6%B8%AF%E5%B7%9D%E5%A4%96%E5%9B%BD%E4%BA%BA%E4%BD%8F%E5%AE%85" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>港川外人住宅區</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 2h</span></a></div>
+          <div class="desc"><span class="tag">☕ 文青咖啡</span><span class="tag">📸 美式街景</span></div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 15min</span></div></div>
+
+      <div class="stop">
+        <div class="t">15:45</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E7%8E%89%E6%B3%89%E6%B4%9E" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>玉泉洞</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 40min</span></a></div>
+          <div class="desc"><span class="tag">🪨 鐘乳石洞</span>探險體驗</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 20min</span></div></div>
+
+      <div class="stop">
+        <div class="t">16:40</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E5%A5%A5%E6%AD%A6%E5%B3%B6%20%E6%B2%96%E7%B8%84" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>奧武島</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 2.5h</span></a></div>
+          <div class="desc"><span class="tag">🍤 天婦羅</span><span class="tag">🌊 漁港</span>天婦羅名店巡禮、漁港風情</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 35min</span></div></div>
+
+      <div class="stop">
+        <div class="t">19:00</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E3%81%B6%E3%81%A1%E3%81%8F%E3%82%82%E3%81%98%E4%BA%AD" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>★ Buchi Kumojiten</span></a></div>
+          <div class="desc"><span class="tag">🥩 燒肉晚餐</span></div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 15min</span></div></div>
+
+      <div class="stop">
+        <div class="t">20:45</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E5%9B%BD%E9%9A%9B%E9%80%9A%E3%82%8A%20%E9%82%A3%E8%A6%87" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>國際通</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 3~4h</span></a></div>
+          <div class="desc"><span class="tag">🛍️ 逛&吃&拍</span><span class="tag">🍺 夜生活</span>伴手禮採買</div>
+        </div>
+      </div>
+      <div class="lodge">
+        <div class="gap"></div>
+        <div class="card">
+          <div class="ic">🏠</div>
+          <div>
+            <div class="label">今晚住宿</div>
+            <a class="name" style="text-decoration:none;color:inherit;display:inline-block;border-bottom:1px dashed #9fb3bb;" href="https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E6%80%A5%E3%82%B9%E3%83%86%E3%82%A4%E6%B2%96%E7%B8%84%E9%82%A3%E8%A6%87" target="_blank" rel="noopener">東急 STAY 沖繩那霸 ↗</a>
+            <div class="sub">11:00 退房</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAY 6 -->
+  <section class="day" id="day6" style="--accent:#2c4a5e;">
+    <div class="day-head">
+      <div class="left">
+        <h2>Day 6</h2>
+        <span class="date">7/3（五）</span>
+      </div>
+      <span class="route">那霸市區</span>
+    </div>
+    <div class="timeline">
+      <div class="stop">
+        <div class="t">10:30</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=DFS%E9%82%A3%E8%A6%87%E5%BA%97" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>DFS 沖繩 那霸店</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 1h</span></a></div>
+          <div class="desc"><span class="tag">🛍️ 免稅購物</span></div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 15min</span></div></div>
+
+      <div class="stop">
+        <div class="t">11:45</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E6%B3%A2%E4%B8%8A%E5%AE%AE" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>波上宮</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 1h</span></a></div>
+          <div class="desc"><span class="tag">⛩️ 神社</span>沖繩知名神社</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 15min</span></div></div>
+
+      <div class="stop">
+        <div class="t">13:00</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E5%9B%BD%E9%9A%9B%E9%80%9A%E3%82%8A%20%E9%82%A3%E8%A6%87" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>國際通</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 至 16:00</span></a></div>
+          <div class="desc"><span class="tag">🛍️ 最後採購日</span>逛&吃&拍
+            <ul>
+              <li>JISAKSU 玩具復古店</li>
+              <li>唐吉軻德</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 20min</span></div></div>
+
+      <div class="stop">
+        <div class="t">16:15</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E7%80%AC%E9%95%B7%E5%B3%B6%E3%82%A6%E3%83%9F%E3%82%AB%E3%82%B8%E3%83%86%E3%83%A9%E3%82%B9" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>瀨長島海風露台</span><span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · 2h ★</span></a></div>
+          <div class="desc"><span class="tag">🌅 看夕陽</span><span class="tag">🥞 鬆餅</span>Umikaji Terrace 幸福鬆餅</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 20min</span></div></div>
+
+      <div class="stop">
+        <div class="t">18:00</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=OTS%E9%82%A3%E8%A6%87%E7%A9%BA%E6%B8%AF%E5%BA%97" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>OTS 還車</span></a></div>
+          <div class="desc">完成租車手續，約 18:00–19:00</div>
+        </div>
+      </div>
+      <div class="drive"><div class="gap"></div><div class="line"><span class="pill">🚗 車程 10min</span></div></div>
+
+      <div class="stop">
+        <div class="t">19:10</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E7%84%BC%E9%B3%A5%E3%81%94%E3%81%86%20%E4%B9%85%E8%8C%82%E5%9C%B0%E5%BA%97" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>燒鳥 ごう 久茂地店</span></a></div>
+          <div class="desc"><span class="tag">🍢 最後晚餐</span>營業到 1:00</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAY 7 -->
+  <section class="day" id="day7" style="--accent:#e2763f;">
+    <div class="day-head">
+      <div class="left">
+        <h2>Day 7</h2>
+        <span class="date">7/4（六）</span>
+      </div>
+      <span class="route">回程</span>
+    </div>
+    <div class="timeline">
+      <div class="stop">
+        <div class="t">06:50</div>
+        <div class="body">
+          <div class="place"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E9%82%A3%E8%A6%87%E7%A9%BA%E6%B8%AF" target="_blank" rel="noopener"><span class="map-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span>前往那霸機場</span></a></div>
+          <div class="desc">辦理報到、托運與安檢</div>
+        </div>
+      </div>
+      <div class="flight">
+        <div class="gap"></div>
+        <div class="card">
+          <div>
+            <div class="label">RETURN FLIGHT</div>
+            <div class="name">08:45 航班起飛 · 返回台灣</div>
+          </div>
+          <div style="font-size:20px;">✈️</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>OKINAWA · 6/28 — 7/4</footer>
+
+<script>
+// Active state on nav based on scroll
+const links = document.querySelectorAll('.daynav a');
+const sections = document.querySelectorAll('.day');
+
+function setActive(){
+  let current = sections[0].id;
+  sections.forEach(sec=>{
+    const rect = sec.getBoundingClientRect();
+    if(rect.top < 120) current = sec.id;
+  });
+  links.forEach(l=>{
+    if(l.getAttribute('href') === '#'+current){
+      l.style.background = '#1b3a4b';
+      l.style.color = '#fff';
+      l.style.borderColor = '#1b3a4b';
+    } else {
+      l.style.background = '';
+      l.style.color = '';
+      l.style.borderColor = '';
+    }
+  });
+}
+window.addEventListener('scroll', setActive);
+setActive();
+</script>
+
+</body>
+</html>
