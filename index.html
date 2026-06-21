@@ -734,7 +734,6 @@ document.querySelectorAll('.place-link[href*="google.com/maps"]').forEach(functi
     var gmapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(query);
     if (isIOS) {
       e.preventDefault();
-      // Try Google Maps app first, fall back to web
       var appUrl = 'comgooglemaps://?q=' + encodeURIComponent(query);
       var fallback = setTimeout(function() {
         window.location.href = gmapsUrl;
