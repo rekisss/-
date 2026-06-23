@@ -742,7 +742,7 @@ footer{
 
 <script>
 // Open map links directly in Google Maps app on iOS/Android
-document.querySelectorAll('.place-link[href*="google.com/maps"]').forEach(function(link) {
+document.querySelectorAll('.place-link[href*="google.com/maps"], .lodge .name[href*="google.com/maps"]').forEach(function(link) {
   link.addEventListener('click', function(e) {
     var url = new URL(this.href);
     var query = url.searchParams.get('query');
