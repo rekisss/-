@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>沖繩 7 日行程</title>
+<script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap');
 
@@ -28,15 +29,21 @@ body{
 
 /* ---- Top header ---- */
 .hero{
-  background: linear-gradient(120deg, #1b3a4b, #2d6e8c);
+  background: linear-gradient(120deg, #1b3a4b, #2d6e8c, #1f5a7a, #1b3a4b);
+  background-size: 300% 300%;
+  animation: heroGrad 12s ease infinite;
   color: white;
   padding: 36px 20px 28px;
   text-align: center;
 }
+@keyframes heroGrad {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
 .hero .eyebrow{
   font-size: 11px;
   letter-spacing: 4px;
-  opacity: 0.75;
+  opacity: 0;
   font-weight: 600;
 }
 .hero h1{
@@ -44,13 +51,24 @@ body{
   font-weight: 900;
   margin-top: 8px;
   letter-spacing: 1px;
+  opacity: 0;
 }
 .hero .dates{
   margin-top: 6px;
   font-size: 13px;
-  opacity: 0.85;
+  opacity: 0;
   font-weight: 500;
 }
+
+/* Timeline dot pop-in */
+.stop .body::before{
+  transform: scale(0);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.stop.dot-visible .body::before{ transform: scale(1); }
+
+/* Lodge card hover */
+.lodge .card{ cursor: default; }
 
 /* ---- Sticky day nav ---- */
 .daynav{
@@ -771,6 +789,83 @@ function setActive(){
 }
 window.addEventListener('scroll', setActive);
 setActive();
+
+// ── 1. Hero entrance ──────────────────────────────────────────
+anime.timeline({ easing: 'easeOutExpo' })
+  .add({ targets: '.hero .eyebrow', opacity: [0, 0.75], translateY: [20, 0], duration: 700 })
+  .add({ targets: '.hero h1',       opacity: [0, 1],    translateY: [28, 0], duration: 750 }, '-=450')
+  .add({ targets: '.hero .dates',   opacity: [0, 0.85], translateY: [16, 0], duration: 550 }, '-=450');
+
+// ── 2. Day cards scroll entrance ─────────────────────────────
+const dayObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (!entry.isIntersecting) return;
+    anime({
+      targets: entry.target,
+      opacity: [0, 1],
+      translateY: [32, 0],
+      duration: 600,
+      easing: 'easeOutExpo'
+    });
+    dayObserver.unobserve(entry.target);
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.day').forEach(function(day) {
+  day.style.opacity = '0';
+  day.style.transform = 'translateY(32px)';
+  dayObserver.observe(day);
+});
+
+// ── 3. Timeline dot pop-in (scroll triggered) ────────────────
+const dotObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (!entry.isIntersecting) return;
+    var stops = entry.target.querySelectorAll('.stop');
+    stops.forEach(function(stop, i) {
+      setTimeout(function() { stop.classList.add('dot-visible'); }, i * 90);
+    });
+    dotObserver.unobserve(entry.target);
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.timeline').forEach(function(tl) { dotObserver.observe(tl); });
+
+// ── 4. Map icon bounce on tap ────────────────────────────────
+document.querySelectorAll('.place-link').forEach(function(link) {
+  link.addEventListener('click', function() {
+    var ic = this.querySelector('.map-ic');
+    if (!ic) return;
+    anime({
+      targets: ic,
+      scale: [1, 1.5, 0.85, 1],
+      duration: 420,
+      easing: 'easeOutElastic(1, 0.5)'
+    });
+  });
+});
+
+// ── 5. Nav button bounce on tap ──────────────────────────────
+document.querySelectorAll('.daynav a').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    anime({
+      targets: this,
+      scale: [1, 0.85, 1.08, 1],
+      duration: 360,
+      easing: 'easeOutElastic(1, 0.6)'
+    });
+  });
+});
+
+// ── 6. Lodge card hover float ────────────────────────────────
+document.querySelectorAll('.lodge .card').forEach(function(card) {
+  card.addEventListener('mouseenter', function() {
+    anime({ targets: this, translateY: -5, duration: 200, easing: 'easeOutQuad' });
+  });
+  card.addEventListener('mouseleave', function() {
+    anime({ targets: this, translateY: 0, duration: 200, easing: 'easeOutQuad' });
+  });
+});
 </script>
 
 </body>
