@@ -741,29 +741,6 @@ footer{
 <footer>OKINAWA · 6/28 — 7/4</footer>
 
 <script>
-// Open map links directly in Google Maps app on iOS/Android
-document.querySelectorAll('.place-link[href*="google.com/maps"], .lodge .name[href*="google.com/maps"]').forEach(function(link) {
-  link.addEventListener('click', function(e) {
-    var url = new URL(this.href);
-    var query = url.searchParams.get('query');
-    if (!query) return;
-    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    var isAndroid = /Android/.test(navigator.userAgent);
-    var gmapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(query);
-    if (isIOS) {
-      e.preventDefault();
-      var appUrl = 'comgooglemaps://?q=' + encodeURIComponent(query);
-      var fallback = setTimeout(function() {
-        window.location.href = gmapsUrl;
-      }, 500);
-      window.location.href = appUrl;
-      window.addEventListener('blur', function() { clearTimeout(fallback); }, { once: true });
-    } else if (isAndroid) {
-      e.preventDefault();
-      window.location.href = 'geo:0,0?q=' + encodeURIComponent(query);
-    }
-  });
-});
 
 // Active state on nav based on scroll
 const links = document.querySelectorAll('.daynav a');
